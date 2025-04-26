@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz Interativo com Imagem Final</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    .questao {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .questao.ativa {
+      display: block;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      background: #eee;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    label:hover {
+      background: #ddd;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .resultado {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+    .imagem-final {
+      max-width: 100%;
+      display: block;
+      margin: 20px auto 0 auto;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quiz Interativo</h1>
+
+    <form id="quizForm">
+      <!-- Questões -->
+      <div class="questao ativa" id="q1">
+        <h2>1. Pergunta 1</h2>
+        <label><input type="radio" name="q1" value="A"> A</label>
+        <label><input type="radio" name="q1" value="B"> B</label>
+        <label><input type="radio" name="q1" value="C"> C</label>
+        <label><input type="radio" name="q1" value="D"> D</label>
+        <label><input type="radio" name="q1" value="E"> E</label>
+        <button type="button" onclick="enviarResposta(1)">Enviar</button>
+      </div>
+
+      <div class="questao" id="q2">
+        <h2>2. Pergunta 2</h2>
+        <label><input type="radio" name="q2" value="A"> A</label>
+        <label><input type="radio" name="q2" value="B"> B</label>
+        <label><input type="radio" name="q2" value="C"> C</label>
+        <label><input type="radio" name="q2" value="D"> D</label>
+        <label><input type="radio" name="q2" value="E"> E</label>
+        <button type="button" onclick="enviarResposta(2)">Enviar</button>
+      </div>
+
+      <div class="questao" id="q3">
+        <h2>3. Pergunta 3</h2>
+        <label><input type="radio" name="q3" value="A"> A</label>
+        <label><input type="radio" name="q3" value="B"> B</label>
+        <label><input type="radio" name="q3" value="C"> C</label>
+        <label><input type="radio" name="q3" value="D"> D</label>
+        <label><input type="radio" name="q3" value="E"> E</label>
+        <button type="button" onclick="enviarResposta(3)">Enviar</button>
+      </div>
+
+      <div class="questao" id="q4">
+        <h2>4. Pergunta 4</h2>
+        <label><input type="radio" name="q4" value="A"> A</label>
+        <label><input type="radio" name="q4" value="B"> B</label>
+        <label><input type="radio" name="q4" value="C"> C</label>
+        <label><input type="radio" name="q4" value="D"> D</label>
+        <label><input type="radio" name="q4" value="E"> E</label>
+        <button type="button" onclick="enviarResposta(4)">Enviar</button>
+      </div>
+
+      <div class="questao" id="q5">
+        <h2>5. Pergunta 5</h2>
+        <label><input type="radio" name="q5" value="A"> A</label>
+        <label><input type="radio" name="q5" value="B"> B</label>
+        <label><input type="radio" name="q5" value="C"> C</label>
+        <label><input type="radio" name="q5" value="D"> D</label>
+        <label><input type="radio" name="q5" value="E"> E</label>
+        <button type="button" onclick="enviarResposta(5)">Enviar</button>
+      </div>
+
+      <button type="button" id="btnResultado" style="display:none;" onclick="calcularResultado()">Ver Resultado</button>
+    </form>
+
+    <div class="resultado" id="resultado"></div>
+    <img id="imagemFinal" class="imagem-final" src="" alt="" style="display:none;">
+  </div>
+
+  <script>
+    const totalQuestoes = 5;
+
+    function enviarResposta(numero) {
+      const radios = document.getElementsByName(`q${numero}`);
+      let selecionado = null;
+
+      radios.forEach(radio => {
+        if (radio.checked) {
+          selecionado = radio.value;
+        }
+      });
+
+      if (!selecionado) {
+        alert("Selecione uma opção antes de continuar.");
+        return;
+      }
+
+      document.getElementById(`q${numero}`).classList.remove('ativa');
+      if (numero < totalQuestoes) {
+        document.getElementById(`q${numero + 1}`).classList.add('ativa');
+      } else {
+        document.getElementById("btnResultado").style.display = "block";
+      }
+    }
+
+    function calcularResultado() {
+      const contagem = {};
+
+      for (let i = 1; i <= totalQuestoes; i++) {
+        const radios = document.getElementsByName(`q${i}`);
+        radios.forEach(radio => {
+          if (radio.checked) {
+            contagem[radio.value] = (contagem[radio.value] || 0) + 1;
+          }
+        });
+      }
+
+      let letraVencedora = null;
+      let maiorContagem = -1;
+
+      for (const letra in contagem) {
+        if (contagem[letra] > maiorContagem) {
+          maiorContagem = contagem[letra];
+          letraVencedora = letra;
+        }
+      }
+
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.innerText = `A sua linguagem de amor é: "${letraVencedora}" (${maiorContagem} vez(es))`;
+
+      const imagem = document.getElementById('imagemFinal');
+      const imagensPorLetra = {
+        A: "https://via.placeholder.com/500x300?text=Imagem+A",
+        B: "https://via.placeholder.com/500x300?text=Imagem+B",
+        C: "https://via.placeholder.com/500x300?text=Imagem+C",
+        D: "https://via.placeholder.com/500x300?text=Imagem+D",
+        E: "https://via.placeholder.com/500x300?text=Imagem+E"
+      };
+
+      imagem.src = imagensPorLetra[letraVencedora];
+      imagem.alt = `Imagem da letra ${letraVencedora}`;
+      imagem.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
